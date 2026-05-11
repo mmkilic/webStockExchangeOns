@@ -58,7 +58,7 @@ export default function App() {
         {data.length > 0 && (
           <div className="my-3 p-3 bg-gray-40 rounded">
             <h2 className="text-lg font-medium mb-2">
-              Price Statistics - XAU (g):
+              Price Statistics - XAU (Stock: mgr / Coin: gr):
             </h2>
             <p>
               Min: {min} - Avg: {avg} - Max: {max} - Now: {now}
