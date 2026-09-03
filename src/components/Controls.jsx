@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { DatePicker, Select, Button } from "antd";
 import dayjs from "dayjs";
 
-export default function Controls({ onGenerate, loading }) {
+export default function Controls({ onGenerate, loading, trendDirection, onTrendChange }) {
   const [companies, setCompanies] = useState([]);
   const [date, setDate] = useState(dayjs("2019-01-01"));
   const [selectedTicker, setSelectedTicker] = useState("THYAO.IS");
@@ -35,9 +35,9 @@ export default function Controls({ onGenerate, loading }) {
   );
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
       <Select
-        className="md:w-1/3"
+        className="w-full"
         options={companies}
         value={selectedTicker}
         onChange={setSelectedTicker}
@@ -45,10 +45,20 @@ export default function Controls({ onGenerate, loading }) {
       />
 
       <DatePicker
-        className="md:w-1/3"
+        className="w-full"
         value={date}
         onChange={setDate}
         format="YYYY-MM-DD"
+      />
+
+      <Select
+        className="w-full"
+        value={trendDirection}
+        onChange={onTrendChange}
+        options={[
+          { value: "none", label: "No Trend Arrow" },
+          { value: "trend", label: "Trend Arrow" },
+        ]}
       />
 
       <Button

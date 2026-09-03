@@ -1,0 +1,72 @@
+GitHub Copilot
+
+export function calculateTrendline(data) {
+  const count = data.length;
+  const meanX = (count - 1) / 2;
+  const meanY = data.reduce((sum, item) => sum + item.value, 0) / count;
+  const denominator = data.reduce(
+    (sum, _, index) => sum + (index - meanX) ** 2,
+    0,
+  );
+  const slope = denominator === 0
+    ? 0
+    : data.reduce(
+        (sum, item, index) => sum + (index - meanX) * (item.value - meanY),
+        0,
+      ) / denominator;
+  const intercept = meanY - slope * meanX;
+
+  return {
+    data: data.map((item, index) => ({
+      ...item,
+      trendValue: intercept + slope * index,
+    })),
+    angle: Math.atan(slope) * (180 / Math.PI),
+  };
+}
+
+---
+ChatGPT
+
+export function calculateTrendline(data) {
+  const n = data.length;
+
+  if (n < 2) {
+    return {
+      data: data.map((item, index) => ({
+        ...item,
+        trendValue: 0,
+      })),
+      angle: 0,
+    };
+  }
+
+  // Excel'deki X değerleri: 1, 2, 3, ..., n
+  const x = data.map((_, index) => index + 1);
+  const y = data.map((item) => Number(item.value));
+
+  const sumX = x.reduce((sum, value) => sum + value, 0);
+  const sumY = y.reduce((sum, value) => sum + value, 0);
+
+  const sumXY = x.reduce((sum, value, index) => sum + value * y[index], 0);
+
+  const sumX2 = x.reduce((sum, value) => sum + value * value, 0);
+
+  // Excel: SLOPE(known_y's, known_x's)
+  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+
+  // Excel: INTERCEPT(known_y's, known_x's)
+  const intercept = (sumY - slope * sumX) / n;
+
+  // Eğimin açı karşılığı
+  // Excel: DEGREES(ATAN(slope))
+  const angle = Math.atan(slope) * (180 / Math.PI);
+
+  return {
+    data: data.map((item, index) => ({
+      ...item,
+      trendValue: intercept + slope * x[index],
+    })),
+    angle,
+  };
+}
